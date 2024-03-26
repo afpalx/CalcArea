@@ -5,6 +5,7 @@
 class Shape {
 	public:
 		virtual double calcArea() const = 0;
+		virtual std::string shapeName() const = 0;
 };
 
 class Square : public Shape {
@@ -14,6 +15,9 @@ class Square : public Shape {
 		Square(double s) : side(s) {}
 		double calcArea() const override {
 			return side * side;
+		}
+		std::string shapeName() const override {
+			return "square";
 		}
 };
 
@@ -26,6 +30,9 @@ class Rectangle : public Shape {
 		double calcArea() const override {
 			return length * width;
 		}
+		std::string shapeName() const override {
+			return "rectangle";
+		}
 };
 
 class Circle : public Shape {
@@ -36,24 +43,17 @@ class Circle : public Shape {
 		double calcArea() const override {
 			return M_PI * radius * radius;
 		}
+		std::string shapeName() const override {
+			return "circle";
+		}
 };
 
 void printArea(const Shape& shape) {
-	if(dynamic_cast<const Square*>(&shape)) {
-		std::cout << "Area of square: ";
-	} else if(dynamic_cast<const Rectangle*>(&shape)) {
-		std::cout << "Area of rectangle: ";
-	} else if(dynamic_cast<const Circle*>(&shape)) {
-		std::cout << "Area of circle: ";
-	}
-	std::cout << shape.calcArea() << std::endl;
+	std::cout << "Area of " << shape.shapeName() << ": " << shape.calcArea() << std::endl;
 }
 
 int main() {
-/**	Square square(3.0);
-	Rectangle rectangle (4.0, 5.0);
-	Circle circle(6.0);
-**/
+
 	double side, length, width, radius;
 	std::vector<Shape*> shapes;
 
@@ -61,40 +61,15 @@ int main() {
 	std::cin >> side;
 	shapes.push_back(new Square(side));
 
-/**
-	Square square(side);
-**/
-
 	std::cout << "Enter length of the rectangle: ";
 	std::cin >> length;
 	std::cout << "Enter width of the rectangle: ";
 	std::cin >> width;
 	shapes.push_back(new Rectangle(length, width));
 
-/**
-	Rectangle rectangle(length, width);
-**/
-
 	std::cout << "Enter the radius of the circle: ";
 	std::cin>> radius;
 	shapes.push_back(new Circle(radius));
-
-/**	
-	Circle circle(radius);
-**/
-
-/**
-	for (const auto& shape : shapes) {
-		if (dynamic_cast<Square*>(shape)) {
-			std::cout << "Area of square: ";
-		} else if (dynamic_cast<Rectangle*>(shape)) {
-			std::cout << "Area of rectangle: ";
-		} else if (dynamic_cast<Circle*>(shape)) {
-			std::cout << "Area of circle: ";
-		}
-		std::cout << shape->calcArea() << std::endl;
-	}
-**/
 
 	for(const auto& shape : shapes) {
 		printArea(*shape);
@@ -104,12 +79,6 @@ int main() {
 	for (const auto& shape : shapes) {
 		delete shape;
 	}
-
-/**
-	std::cout << "Area of square: " << square.calcArea() << std::endl;
-	std::cout << "Area of rectangle: " << rectangle.calcArea() << std::endl;
-	std::cout << "Area of circle: " << circle.calcArea() << std::endl;
-**/
 
 	return 0;
 }
